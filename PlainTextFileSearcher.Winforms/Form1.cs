@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,7 @@ using PlainTextFileSearcher.Business.ExtensionMethods;
 using PlainTextFileSearcher.Business.Methods;
 using PlainTextFileSearcher.Business.Services;
 using PlainTextFileSearcher.Business.Singletons;
+using PlainTextFileSearcher.Business.Types;
 
 namespace PlainTextFileSearcher.Winforms
 {
@@ -51,37 +53,34 @@ namespace PlainTextFileSearcher.Winforms
             }
 
 
-            try
-            {
+            //try
+            //{
 
                 Stopwatch STPWTCH = new Stopwatch();
                 string path = lblOpenedFolder.Text;
                 string word = tbxSearch.Text;
-                List<string> AllFiles = await AsyncCalls.GetFilesAsync(path);
-                Memory<string> AllLines = new Memory<string>();
+                ConcurrentList<string> AllFiles = await AsyncCalls.GetFilesAsync(path);
+                ConcurrentList<string> AllLines = new ConcurrentList<string>();
                 int AmountOfFoundFiles = 0;
                 int AmountOfFoundLines = 0;
                 STPWTCH.Start();
-                Iterations.AllFilesIterator(AllFiles, word, AmountOfFoundLines, ref AllLines, path, AmountOfFoundLines);
+                await Iterations.AllFilesIteratorAsync(AllFiles, word, AmountOfFoundLines,AllLines, path, AmountOfFoundLines);
                 lblMatchesInFiles.Text = "files with matches: " + AmountOfFoundFiles.ToString();
                 lblTotalMatches.Text = "total matches: " + AmountOfFoundLines.ToString();
-
                 STPWTCH.Stop();
                 TimeSpan TS = STPWTCH.Elapsed;
 
                 lblTimePassedMs.Text = "🕑" + TS.TotalMilliseconds;
-
                 tbxSearchResults.Text = string.Join(Environment.NewLine, AllLines.ToArray());
-
                 btnSearch.Text = SEARCH;
-            }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // Variable is declared but never used
-            {
-                Application.Restart();
-                Environment.Exit(0);
-            }
+//            }
+//#pragma warning disable CS0168 // Variable is declared but never used
+//            catch (Exception ex)
+//#pragma warning restore CS0168 // Variable is declared but never used
+//            {
+//                Application.Restart();
+//                Environment.Exit(0);
+//            }
 
         }
 

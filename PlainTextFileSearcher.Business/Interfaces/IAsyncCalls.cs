@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlainTextFileSearcher.Business.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace PlainTextFileSearcher.Business.Interfaces
 {
     public interface IAsyncCalls
     {
-        Task<List<string>> GetLinesAsync(string item);
+        Task<ConcurrentList<string>> GetLinesAsync(string item);
         Task<bool> ContainsWordAsync(string Line, string word);
-        Task<List<string>> GetFilesAsync(string path);
+        Task<ConcurrentList<string>> GetFilesAsync(string path);
     }
 }

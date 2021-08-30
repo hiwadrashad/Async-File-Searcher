@@ -13,14 +13,13 @@ namespace PlainTextFileSearcher.Test.Tests
         [Fact]
         public void FULL_PARAGRAPH_ITERATOR_TEST()
         {
-            (string, string) fullparagraph = (" ... club werd in <a href='.. / .. / .. / .. / articles / 1 / 8 / 8 / 1885.html' title='1885'>1885</a>", "als <i>Újpesti Torna Egylet</i> en is daarmee de oudste van het land. De<p>...");
             int row = 100;
             string Line = "... club werd in <a href='.. / .. / .. / .. / articles / 1 / 8 / 8 / 1885.html' title='1885'>1885</a>" + "Voorbeeld" + "als <i>Újpesti Torna Egylet</i> en is daarmee de oudste van het land. De<p>...";
             List<(string, string)> combinedLines = new List<(string, string)>() {("... club werd in <a href='.. / .. / .. / .. / articles / 1 / 8 / 8 / 1885.html' title='1885'>1885</a>" + "Voorbeeld", "als <i>Újpesti Torna Egylet</i> en is daarmee de oudste van het land. De<p>...") };
             string word = "Voorbeeld";
-            Memory<string> AllLines = new Memory<string>();
-            Iterations.FullParagraphIterator(combinedLines,word,row,Line,ref AllLines);
-            Assert.True(AllLines.Length > 0);
+            List<string> AllLines = new List<string>();
+            Iterations.FullParagraphIterator(combinedLines,word,row,Line,AllLines);
+            Assert.True(AllLines.Count > 0);
         }
 
         [Fact]
@@ -42,11 +41,11 @@ namespace PlainTextFileSearcher.Test.Tests
             { Environment.CurrentDirectory + @"\..\..\..\UniTestFiles\+Üjpest_FC_81f1.html" };
             string word = "DOCTYPE";
             int AmoutnOfFoundLines = 0;
-            Memory<string> AllLines = new Memory<string>();
+            List<string> AllLines = new List<string>();
             string path =  Environment.CurrentDirectory + @"\..\..\..\UniTestFiles\+Üjpest_FC_81f1.html";
             int AmountOfFoundLines = 0;
-            Iterations.AllFilesIterator(AllFiles,word,AmoutnOfFoundLines,ref AllLines,path,AmountOfFoundLines);
-            Assert.True(AllLines.Length > 0);
+            Iterations.AllFilesIterator(AllFiles,word,AmoutnOfFoundLines,AllLines,path,AmountOfFoundLines);
+            Assert.True(AllLines.Count > 0);
         }
     }
 }

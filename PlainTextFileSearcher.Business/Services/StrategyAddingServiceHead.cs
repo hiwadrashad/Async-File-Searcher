@@ -5,20 +5,23 @@ using System.Threading.Tasks;
 using PlainTextFileSearcher.Business.ExtensionMethods;
 using PlainTextFileSearcher.Business.Interfaces;
 using PlainTextFileSearcher.Business.Singletons;
+using PlainTextFileSearcher.Business.Types;
 
 namespace PlainTextFileSearcher.Business.Services
 {
     public class StrategyAddingServiceHead : IStrategyAddingService
     {
-        public void AddBody(ref Memory<string> AllLines, string textwithcoordinates)
+        public void AddBody(ConcurrentList<string> AllLines, string textwithcoordinates)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
-        public void AddHeader(ref Memory<string> AllLines, string item, string path)
+        public void AddHeader(ConcurrentList<string> AllLines, string item, string path)
         {
             AllLines.Add("");
             AllLines.Add(item.Remove(0, path.Length));
+            Singletons.ResultsSingleton.AddResult("");
+            Singletons.ResultsSingleton.AddResult(item.Remove(0, path.Length));
         }
     }
 }

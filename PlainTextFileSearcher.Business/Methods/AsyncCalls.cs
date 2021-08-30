@@ -1,18 +1,22 @@
 ﻿using PlainTextFileSearcher.Business.Interfaces;
 using PlainTextFileSearcher.Business.Singletons;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PlainTextFileSearcher.Business.ExtensionMethods;
+using PlainTextFileSearcher.Business.Types;
+
 namespace PlainTextFileSearcher.Business.Methods
 {
     public class AsyncCalls
     {
-        public static Task<List<string>> GetLinesAsync(string item)
+        public static Task<ConcurrentList<string>> GetLinesAsync(string item)
         {
-            Task<List<string>> GetLinesAsync = new Task<List<string>>(() => File.ReadAllLines(item).ToList(), CancelationTokenSingleton.GetCancelationToken());
+            Task<ConcurrentList<string>> GetLinesAsync = new Task<ConcurrentList<string>>(() => File.ReadAllLines(item).ToList().ToConcurrentList<string>(), CancelationTokenSingleton.GetCancelationToken());
             GetLinesAsync.Start();
             return GetLinesAsync;
         }
@@ -24,9 +28,9 @@ namespace PlainTextFileSearcher.Business.Methods
             return ContainsWordAsync;
         }
 
-        public static Task<List<string>> GetFilesAsync(string path)
+        public static Task<ConcurrentList<string>> GetFilesAsync(string path)
         {
-            Task<List<string>> GetFilesAsync = new Task<List<string>>(() => Directory.GetFiles(path, "*.*", searchOption: SearchOption.AllDirectories).Where(a => a.EndsWith(".txt") || a.EndsWith(".html")).ToList(), CancelationTokenSingleton.GetCancelationToken());
+            Task<ConcurrentList<string>> GetFilesAsync = new Task<ConcurrentList<string>>(() => Directory.GetFiles(path, "*.*", searchOption: SearchOption.AllDirectories).Where(a => a.EndsWith(".txt") || a.EndsWith(".html")).ToList().ToConcurrentList<string>(), CancelationTokenSingleton.GetCancelationToken());
             GetFilesAsync.Start();
             return GetFilesAsync;
         }

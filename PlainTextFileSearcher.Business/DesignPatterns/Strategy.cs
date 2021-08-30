@@ -1,5 +1,6 @@
 ﻿using PlainTextFileSearcher.Business.Interfaces;
 using PlainTextFileSearcher.Business.Services;
+using PlainTextFileSearcher.Business.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,11 +26,11 @@ namespace PlainTextFileSearcher.Business.DesignPatterns
             this._strategyAddingService = strategy;
         }
 
-        public void ExecuteHeader(ref Memory<string> AllLines, string item, string path)
+        public void ExecuteHeader(ConcurrentList<string> AllLines, string item, string path)
         {
             if (this._strategyAddingService is StrategyAddingServiceHead)
             {
-                this._strategyAddingService.AddHeader(ref AllLines, item, path);
+                this._strategyAddingService.AddHeader(AllLines, item, path);
             }
             else
             {
@@ -37,12 +38,12 @@ namespace PlainTextFileSearcher.Business.DesignPatterns
             }
         }
 
-        public void ExecuteBody(ref Memory<string> AllLines, string textwithcoordinates)
+        public void ExecuteBody(ConcurrentList<string> AllLines, string textwithcoordinates)
         {
 
             if (this._strategyAddingService is StrategyAddingServiceBody)
             {
-                this._strategyAddingService.AddBody(ref AllLines, textwithcoordinates);
+                this._strategyAddingService.AddBody(AllLines, textwithcoordinates);
             }
             else
             {
