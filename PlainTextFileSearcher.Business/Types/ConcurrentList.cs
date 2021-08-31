@@ -251,7 +251,10 @@ namespace PlainTextFileSearcher.Business.Types
 
         public void Dispose()
         {
-            this._lock.ExitReadLock();
+            if (this._lock.IsReadLockHeld)
+            {
+                this._lock.ExitReadLock();
+            }
         }
         #endregion
 

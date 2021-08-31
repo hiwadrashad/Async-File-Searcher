@@ -106,14 +106,18 @@ namespace PlainTextFileSearcher.Business.Methods
             await Files;
         }
 
-        public static void AllFilesIterator(ConcurrentList<string> AllFiles,string word,int AmoutnOfFoundLines, ConcurrentList<string> AllLines, string path, int AmountOfFoundLines)
+        public static async void AllFilesIterator(ConcurrentList<string> AllFiles,string word,int AmoutnOfFoundLines, ConcurrentList<string> AllLines, string path, int AmountOfFoundLines)
         {
 
+            Singletons.ResultsSingleton.AssignCurrentFileCount(0);
             foreach (var item in AllFiles)
             {
+                int currentfileindex = ResultsSingleton.GetCurrentFileCount();
+                int currentfileindexincremented = currentfileindex + 1;
+                ResultsSingleton.AssignCurrentFileCount(currentfileindexincremented);
                 int row = 0;
                 int nodeindex = 0;
-                ConcurrentList<string> Lines = PlainTextFileSearcher.Business.Methods.AsyncCalls.GetLinesAsync(item).Result;
+                ConcurrentList<string> Lines = await PlainTextFileSearcher.Business.Methods.AsyncCalls.GetLinesAsync(item);
                 Iterations.LineIterator(Lines, word, row, AmountOfFoundLines, nodeindex, AmountOfFoundLines,AllLines, item, path);              
             }
         }

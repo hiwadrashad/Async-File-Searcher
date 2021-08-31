@@ -10,6 +10,7 @@ namespace PlainTextFileSearcher.Business.Singletons
     public class ResultsSingleton
     {
         private static ConcurrentList<string> _results;
+        private static int _currentFileCount;
 
         private ResultsSingleton()
         {
@@ -18,9 +19,17 @@ namespace PlainTextFileSearcher.Business.Singletons
 
         public static ConcurrentList<string> GetResults()
         {
-     
-
             return _results;
+        }
+
+        public static int GetCurrentFileCount()
+        {
+            return _currentFileCount;
+        }
+
+        public static void AssignCurrentFileCount(int input)
+        {
+            _currentFileCount = input;
         }
 
         public static void AddResult(string input)

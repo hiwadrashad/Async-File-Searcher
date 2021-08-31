@@ -38,6 +38,7 @@ namespace PlainTextFileSearcher.Winforms
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.lblMatchesInFiles = new System.Windows.Forms.Label();
             this.lblTotalMatches = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // tbxSearch
@@ -71,7 +72,7 @@ namespace PlainTextFileSearcher.Winforms
             this.tbxSearchResults.Name = "tbxSearchResults";
             this.tbxSearchResults.ReadOnly = true;
             this.tbxSearchResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbxSearchResults.Size = new System.Drawing.Size(498, 375);
+            this.tbxSearchResults.Size = new System.Drawing.Size(498, 379);
             this.tbxSearchResults.TabIndex = 2;
             this.tbxSearchResults.WordWrap = false;
             this.tbxSearchResults.TextChanged += new System.EventHandler(this.tbxSearchResults_TextChanged);
@@ -127,11 +128,19 @@ namespace PlainTextFileSearcher.Winforms
             this.lblTotalMatches.Text = "total matches: 0";
             this.lblTotalMatches.Click += new System.EventHandler(this.lblTotalMatches_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(13, 492);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(497, 23);
+            this.progressBar1.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(522, 478);
+            this.ClientSize = new System.Drawing.Size(522, 536);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblTotalMatches);
             this.Controls.Add(this.lblMatchesInFiles);
             this.Controls.Add(this.lblTimePassedMs);
@@ -158,6 +167,7 @@ namespace PlainTextFileSearcher.Winforms
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Label lblMatchesInFiles;
         private System.Windows.Forms.Label lblTotalMatches;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

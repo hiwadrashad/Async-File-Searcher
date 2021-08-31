@@ -34,7 +34,7 @@ namespace PlainTextFileSearcher.Business.DesignPatterns
             }
             else
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
             }
         }
 
@@ -47,7 +47,7 @@ namespace PlainTextFileSearcher.Business.DesignPatterns
             }
             else
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
             }
         }
     }

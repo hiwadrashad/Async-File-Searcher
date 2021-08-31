@@ -33,20 +33,24 @@ namespace PlainTextFileSearcher.Winforms
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-
             bool AssignedText = false;
 
             if (btnSearch.Text == CANCEL)
             {
                 CancelationTokenSingleton.GetCancellationTokenSource().Cancel();
+                progressBar1.Value = 0;
+                tbxSearchResults.Text = "";
                 btnSearch.Text = SEARCH;
                 AssignedText = true;
             }
 
             if (AssignedText == false)
             {
+
                 if (btnSearch.Text == SEARCH)
                 {
+                    progressBar1.Value = 0;
+                    tbxSearchResults.Text = "";
                     btnSearch.Text = CANCEL;
                     btnSearch.Update();
                 }
@@ -64,9 +68,22 @@ namespace PlainTextFileSearcher.Winforms
                 int AmountOfFoundFiles = 0;
                 int AmountOfFoundLines = 0;
                 STPWTCH.Start();
-                await Iterations.AllFilesIteratorAsync(AllFiles, word, AmountOfFoundLines,AllLines, path, AmountOfFoundLines);
-                await this.AssignValueToLabelAsync();
-
+                await Iterations.AllFilesIteratorAsync(AllFiles, word, AmountOfFoundLines, AllLines, path, AmountOfFoundLines);
+                this.Invoke(new MethodInvoker(delegate () { AssignValueToLabel(); }));
+                progressBar1.Maximum = AllFiles.Count;
+                progressBar1.Minimum = 0;
+                progressBar1.Step = 1;
+                progressBar1.Style = ProgressBarStyle.Continuous;
+                progressBar1.Invoke((Action)(() =>
+                {
+                    for (int i = 0; i <= AllFiles.Count; i++)
+                    {
+                        progressBar1.Value = ResultsSingleton.GetCurrentFileCount() + 1;
+                    }
+                }
+                ));
+                
+                tbxSearchResults.Text = string.Join(Environment.NewLine, AllLines.ToArray());
                 lblMatchesInFiles.Text = "files with matches: " + AmountOfFoundFiles.ToString();
                 lblTotalMatches.Text = "total matches: " + AmountOfFoundLines.ToString();
                 STPWTCH.Stop();
@@ -92,7 +109,7 @@ namespace PlainTextFileSearcher.Winforms
             Assign.Start();
             await Assign;
         }
-        private void AssignValueToLabel()
+        private async void AssignValueToLabel()
         {
             ConcurrentList<string> LabelValues = new ConcurrentList<string>();
             int ListCount = 0;
@@ -102,6 +119,8 @@ namespace PlainTextFileSearcher.Winforms
             // });
             while (true)
             {
+                await Task.Delay(50);
+                LabelValues = ResultsSingleton.GetResults();
                 LabelValues = ResultsSingleton.GetResults().Distinct().ToList().ToConcurrentList<string>();
                 tbxSearchResults.Text = string.Join(Environment.NewLine, LabelValues.ToArray());
                 if (ListCount < LabelValues.Count())
