@@ -74,7 +74,7 @@ namespace PlainTextFileSearcher.Business.Methods
             {
             var ContainsWordAsync = AsyncCalls.ContainsWordAsync(Line, word);
             row++;
-                if (ContainsWordAsync.Result)
+                if (await ContainsWordAsync)
                 {
                     AmountOfFoundLines++;
                     nodeindex++;

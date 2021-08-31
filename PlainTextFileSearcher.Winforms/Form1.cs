@@ -72,7 +72,7 @@ namespace PlainTextFileSearcher.Winforms
                 this.Invoke(new MethodInvoker(delegate () { AssignValueToLabel(); }));
                 progressBar1.Maximum = AllFiles.Count;
                 progressBar1.Minimum = 0;
-                progressBar1.Step = 1;
+                progressBar1.Step = 100;
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Invoke((Action)(() =>
                 {
