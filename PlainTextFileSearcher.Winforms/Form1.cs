@@ -53,8 +53,8 @@ namespace PlainTextFileSearcher.Winforms
             }
 
 
-            //try
-            //{
+            try
+            {
 
                 Stopwatch STPWTCH = new Stopwatch();
                 string path = lblOpenedFolder.Text;
@@ -65,25 +65,58 @@ namespace PlainTextFileSearcher.Winforms
                 int AmountOfFoundLines = 0;
                 STPWTCH.Start();
                 await Iterations.AllFilesIteratorAsync(AllFiles, word, AmountOfFoundLines,AllLines, path, AmountOfFoundLines);
+                await this.AssignValueToLabelAsync();
+
                 lblMatchesInFiles.Text = "files with matches: " + AmountOfFoundFiles.ToString();
                 lblTotalMatches.Text = "total matches: " + AmountOfFoundLines.ToString();
                 STPWTCH.Stop();
                 TimeSpan TS = STPWTCH.Elapsed;
-
                 lblTimePassedMs.Text = "🕑" + TS.TotalMilliseconds;
-                tbxSearchResults.Text = string.Join(Environment.NewLine, AllLines.ToArray());
+                //tbxSearchResults.Text = string.Join(Environment.NewLine,ResultsSingleton.GetResults().ToArray());
                 btnSearch.Text = SEARCH;
-//            }
-//#pragma warning disable CS0168 // Variable is declared but never used
-//            catch (Exception ex)
-//#pragma warning restore CS0168 // Variable is declared but never used
-//            {
-//                Application.Restart();
-//                Environment.Exit(0);
-//            }
+        }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            {
+                Application.Restart();
+                Environment.Exit(0);
+            }
 
+}
+
+        private async Task AssignValueToLabelAsync()
+        {
+            Form1 form = this;
+            Task Assign = new Task(() => form.AssignValueToLabel(), CancelationTokenSingleton.GetCancelationToken());
+            Assign.Start();
+            await Assign;
+        }
+        private void AssignValueToLabel()
+        {
+            ConcurrentList<string> LabelValues = new ConcurrentList<string>();
+            int ListCount = 0;
+            //Parallel.ForEach(Infinite.ReturnInfinite(), (ParallelLoopState state) =>
+            // {
+
+            // });
+            while (true)
+            {
+                LabelValues = ResultsSingleton.GetResults().Distinct().ToList().ToConcurrentList<string>();
+                tbxSearchResults.Text = string.Join(Environment.NewLine, LabelValues.ToArray());
+                if (ListCount < LabelValues.Count())
+                {
+                    ListCount = LabelValues.Count();
+                }
+                else
+                {
+                    //SubRoutines.RemoveEmptySubHeaders(LabelValues);
+                    break;
+                }
+            }
         }
 
+        
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
             folderBrowserDialog.ShowDialog();

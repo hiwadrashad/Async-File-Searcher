@@ -138,7 +138,7 @@ namespace PlainTextFileSearcher.Business.Methods
                         }
                         else
                         {
-                            if (String.IsNullOrEmpty(AllLines[index + 1])) ;
+                            if (String.IsNullOrEmpty(AllLines[index + 1]))
                             {
                                 AllLines.RemoveAt(index);
                             }
@@ -149,5 +149,40 @@ namespace PlainTextFileSearcher.Business.Methods
                 
             }
         }
+
+        public static ConcurrentList<string> RemoveEmptySubHeaders(ConcurrentList<string> input)
+        {
+            int index = 0;
+            foreach (var line in input)
+            {
+                if (index == 0)
+                {
+                    if (input[1].StartsWith(@"\"))
+                    {
+                        input.RemoveAt(0);
+                    }
+
+                }
+                else
+                if (index == input.Count - 1)
+                {
+                    if (input[index - 1].StartsWith(@"\"))
+                    {
+                        input.RemoveAt(index);
+                    }
+                }
+                else
+                {
+                    if (input[index + 1].StartsWith(@"\") && input[index].StartsWith(@"\"))
+                    {
+                        input.RemoveAt(index);
+                    }
+                }
+                index++;
+            }
+
+            return new ConcurrentList<string>();
+        }
+
     }
 }

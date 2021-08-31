@@ -13,6 +13,7 @@ namespace PlainTextFileSearcher.Business.Services
     {
         public void AddBody(ConcurrentList<string> AllLines, string textwithcoordinates)
         {
+            textwithcoordinates = textwithcoordinates.Replace(" ", string.Empty);
             AllLines.Add(textwithcoordinates);
             Singletons.ResultsSingleton.AddResult(textwithcoordinates);
         }

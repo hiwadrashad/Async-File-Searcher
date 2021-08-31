@@ -114,8 +114,7 @@ namespace PlainTextFileSearcher.Business.Methods
                 int row = 0;
                 int nodeindex = 0;
                 ConcurrentList<string> Lines = PlainTextFileSearcher.Business.Methods.AsyncCalls.GetLinesAsync(item).Result;
-                Iterations.LineIterator(Lines, word, row, AmountOfFoundLines, nodeindex, AmountOfFoundLines,AllLines, item, path);
-              
+                Iterations.LineIterator(Lines, word, row, AmountOfFoundLines, nodeindex, AmountOfFoundLines,AllLines, item, path);              
             }
         }
 
