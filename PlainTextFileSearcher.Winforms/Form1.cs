@@ -68,27 +68,24 @@ namespace PlainTextFileSearcher.Winforms
                 int AmountOfFoundFiles = 0;
                 int AmountOfFoundLines = 0;
                 STPWTCH.Start();
-                await Iterations.AllFilesIteratorAsync(AllFiles, word, AmountOfFoundLines, AllLines, path, AmountOfFoundLines);
-                this.Invoke(new MethodInvoker(delegate () { AssignValueToLabel(); }));
+                await Iterations.AllFilesIteratorAsync(AllFiles, word, AmountOfFoundFiles, AllLines, path, AmountOfFoundLines);
+                this.Invoke(new MethodInvoker(delegate () { AssignValueToLabel(STPWTCH); }));
+                this.AutoScroll = false;
+                //progressBar1.Maximum = AllFiles.Count;
                 progressBar1.Maximum = AllFiles.Count;
                 progressBar1.Minimum = 0;
-                progressBar1.Step = 100;
+                progressBar1.Step = 1;
                 progressBar1.Style = ProgressBarStyle.Continuous;
-                progressBar1.Invoke((Action)(() =>
+                progressBar1.Invoke((Action)(async () =>
                 {
-                    for (int i = 0; i <= AllFiles.Count; i++)
+                    for (int i = 0; i <= AllFiles.Count; i += 1)
                     {
-                        progressBar1.Value = ResultsSingleton.GetCurrentFileCount() + 1;
+                            await Task.Delay(50);
+                            progressBar1.Value = ResultsSingleton.GetCurrentFileCount();                        
                     }
+    
                 }
                 ));
-                
-                tbxSearchResults.Text = string.Join(Environment.NewLine, AllLines.ToArray());
-                lblMatchesInFiles.Text = "files with matches: " + AmountOfFoundFiles.ToString();
-                lblTotalMatches.Text = "total matches: " + AmountOfFoundLines.ToString();
-                STPWTCH.Stop();
-                TimeSpan TS = STPWTCH.Elapsed;
-                lblTimePassedMs.Text = "🕑" + TS.TotalMilliseconds;
                 //tbxSearchResults.Text = string.Join(Environment.NewLine,ResultsSingleton.GetResults().ToArray());
                 btnSearch.Text = SEARCH;
         }
@@ -102,34 +99,35 @@ namespace PlainTextFileSearcher.Winforms
 
 }
 
-        private async Task AssignValueToLabelAsync()
+        private async Task AssignValueToLabelAsync(Stopwatch STPWTCH)
         {
             Form1 form = this;
-            Task Assign = new Task(() => form.AssignValueToLabel(), CancelationTokenSingleton.GetCancelationToken());
+            Task Assign = new Task(() => form.AssignValueToLabel(STPWTCH), CancelationTokenSingleton.GetCancelationToken());
             Assign.Start();
             await Assign;
         }
-        private async void AssignValueToLabel()
+        private async void AssignValueToLabel(Stopwatch STPWTCH)
         {
             ConcurrentList<string> LabelValues = new ConcurrentList<string>();
             int ListCount = 0;
-            //Parallel.ForEach(Infinite.ReturnInfinite(), (ParallelLoopState state) =>
-            // {
-
-            // });
             while (true)
             {
                 await Task.Delay(50);
-                LabelValues = ResultsSingleton.GetResults();
                 LabelValues = ResultsSingleton.GetResults().Distinct().ToList().ToConcurrentList<string>();
+                lblMatchesInFiles.Text = "files with matches: " + ResultsSingleton.GetCurrentFoundFiles().ToString();
+                lblTotalMatches.Text = "total matches: " + ResultsSingleton.GetCurrentFoundLines().ToString();
                 tbxSearchResults.Text = string.Join(Environment.NewLine, LabelValues.ToArray());
                 if (ListCount < LabelValues.Count())
                 {
                     ListCount = LabelValues.Count();
+                    TimeSpan TS = STPWTCH.Elapsed;
+                    lblTimePassedMs.Text = "🕑" + TS.TotalMilliseconds;
                 }
                 else
                 {
-                    //SubRoutines.RemoveEmptySubHeaders(LabelValues);
+                    STPWTCH.Stop();
+                    TimeSpan TS = STPWTCH.Elapsed;
+                    lblTimePassedMs.Text = "🕑" + TS.TotalMilliseconds;
                     break;
                 }
             }

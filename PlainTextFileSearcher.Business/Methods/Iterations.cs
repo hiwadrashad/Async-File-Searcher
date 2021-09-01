@@ -77,10 +77,12 @@ namespace PlainTextFileSearcher.Business.Methods
                 if (await ContainsWordAsync)
                 {
                     AmountOfFoundLines++;
+                    ResultsSingleton.AssignCurrentFoundLines();
                     nodeindex++;
                     if (nodeindex == 1)
                     {
                         AmountOfFoundFiles++;
+                        ResultsSingleton.AssignCurrentFoundFiles();
                         StrategySummaries.ExecuteHead(AllLines, item, path);
                     }
 

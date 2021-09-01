@@ -9,8 +9,10 @@ namespace PlainTextFileSearcher.Business.Singletons
 {
     public class ResultsSingleton
     {
-        private static ConcurrentList<string> _results;
+        private static ConcurrentList<string> _results = new ConcurrentList<string>();
         private static int _currentFileCount;
+        private static int _currentFoundFiles;
+        private static int _currentFoundLines;
 
         private ResultsSingleton()
         {
@@ -22,6 +24,27 @@ namespace PlainTextFileSearcher.Business.Singletons
             return _results;
         }
 
+        public static void AssignCurrentFoundFiles()
+        {
+            var incremented = _currentFoundFiles + 1;
+            _currentFoundFiles = incremented;
+        }
+
+        public static int GetCurrentFoundFiles()
+        {
+            return _currentFoundFiles;    
+        }
+
+        public static void AssignCurrentFoundLines()
+        {
+            var incremented = _currentFoundLines + 1;
+            _currentFoundLines = incremented;
+        }
+
+        public static int GetCurrentFoundLines()
+        {
+            return _currentFoundLines;
+        }
         public static int GetCurrentFileCount()
         {
             return _currentFileCount;
